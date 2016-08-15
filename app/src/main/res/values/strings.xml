@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">zhuanlanC</string>
+    <string name="app_name">CaibiyBlog</string>
+    <string name="about">关于</string>
 </resources>
