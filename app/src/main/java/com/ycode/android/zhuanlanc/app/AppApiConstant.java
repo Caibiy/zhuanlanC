@@ -6,5 +6,7 @@ package com.ycode.android.zhuanlanc.app;
  * Email:      caibiy666@gmail.com
  */
 public class AppApiConstant {
-    public static final String JSONVALUE="get_recent_posts";
+    public static final String QUERY_ANDROID="android";
+    public static final String QUERY_WEB="web";
+    public static final String QUERY_LIFE="life";
 }

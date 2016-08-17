@@ -9,8 +9,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 
 import com.ycode.android.zhuanlanc.baseui.BaseActivity;
-import com.ycode.android.zhuanlanc.fragment.ContentFragment;
-import com.ycode.android.zhuanlanc.fragment.GirlFragment;
+import com.ycode.android.zhuanlanc.baseui.BaseFragment;
+import com.ycode.android.zhuanlanc.fragment.AndroidFragment;
+import com.ycode.android.zhuanlanc.fragment.LifeFragment;
+import com.ycode.android.zhuanlanc.fragment.WebFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,8 +24,8 @@ public class MainActivity extends BaseActivity{
      ViewPager viewPager;
     @Bind(R.id.tab_layout)
      TabLayout tabLayout;
-    private String[]titles={"专栏","妹子"};
-    private Class[]fragments={ContentFragment.class, GirlFragment.class};
+    private String[]titles={"Android","Web","Life"};
+    private Class[]fragments={AndroidFragment.class, WebFragment.class,WebFragment.class};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +35,18 @@ public class MainActivity extends BaseActivity{
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return (position==0)?new ContentFragment():new GirlFragment();
+               switch(position){
+                   case 0:
+                       return new AndroidFragment();
+
+                   case 1:
+                        return new WebFragment();
+
+                   case 2:
+                        return new LifeFragment();
+
+               }
+              return new BaseFragment();
             }
 
             @Override

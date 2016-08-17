@@ -1,11 +1,11 @@
 package com.ycode.android.zhuanlanc.networks;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.ycode.android.zhuanlanc.api.CaibiyInterface;
 import com.ycode.android.zhuanlanc.app.AppApiConstant;
-import com.ycode.android.zhuanlanc.bean.CaibiyBean;
+import com.ycode.android.zhuanlanc.bean.AndroidBean;
+
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,11 +24,14 @@ import rx.schedulers.Schedulers;
  * Time :     2016/8/7
  * Email:      caibiy666@gmail.com
  */
-public class RetrofitSingle {
+public class AndroidRetrofitSingle {
     private static OkHttpClient okHttpClient=null;
     private static Retrofit mRetrofit;
     private Context context;
-    private Subscriber<CaibiyBean> mSubscriber=new Subscriber<CaibiyBean>() {
+    /**
+     * 默认的Subscriber,遵循5大原则
+     */
+    private Subscriber<AndroidBean> mSubscriber=new Subscriber<AndroidBean>() {
         @Override
         public void onCompleted() {
 
@@ -40,15 +43,15 @@ public class RetrofitSingle {
         }
 
         @Override
-        public void onNext(CaibiyBean caibiyBean) {
+        public void onNext(AndroidBean caibiyBean) {
 
         }
     };
-    private RetrofitSingle(){
+    private AndroidRetrofitSingle(){
         initClient();
         initRetrofit();
     }
-    public static RetrofitSingle getSinIns(){
+    public static AndroidRetrofitSingle getSinIns(){
         return SingleHolder.mRetrofitSingle;
     }
     //初始化okHttpClient
@@ -60,7 +63,7 @@ public class RetrofitSingle {
         .connectTimeout(20,TimeUnit.SECONDS);
         okHttpClient=builder.build();
     }
-    public void setSubscriber(Context context, Subscriber subscriber){
+    public void setSubscriber(Context context, Subscriber<AndroidBean> subscriber){
         this.mSubscriber=subscriber;
         this.context=context;
         Subscribe();
@@ -72,15 +75,14 @@ public class RetrofitSingle {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
     }
-    public void Subscribe(){
+    private void Subscribe(){
         CaibiyInterface CInterface=mRetrofit.create(CaibiyInterface.class);
-        Observable<CaibiyBean>observable=CInterface.get(AppApiConstant.JSONVALUE);
+        Observable<AndroidBean>observable=CInterface.getAndroid(AppApiConstant.QUERY_ANDROID);
         observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(mSubscriber);
     }
     public static  class SingleHolder{
-        private static final RetrofitSingle mRetrofitSingle=new RetrofitSingle();
+        private static final AndroidRetrofitSingle mRetrofitSingle=new AndroidRetrofitSingle();
     }
-
 }

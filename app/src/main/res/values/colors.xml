@@ -5,4 +5,6 @@
     <color name="colorAccent">#cc99cc</color>
     <color name="colorComment">#cc99cc</color>
     <color name="selectedColor">#cc66cc</color>
+    <color name="normalColor">#cc99ff</color>
+    <color name="selectColor">#ccccff</color>
 </resources>

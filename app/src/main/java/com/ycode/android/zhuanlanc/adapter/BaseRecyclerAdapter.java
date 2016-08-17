@@ -16,16 +16,19 @@ public  abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recyc
         protected  final String TAG=getClass().getSimpleName();
         protected  final Context mContext;
         protected  final LayoutInflater mLayInflater;
+
         public BaseRecyclerAdapter(Context context){
             this.mContext=context;
             mLayInflater=LayoutInflater.from(mContext);
         }
         protected  List<T>  mDataList=new ArrayList<>();
+
         //返回当前数据集合
         public List<T> getDataList(){return mDataList;}
         //返回指定位置数据
         public T getItemData(int position){
-            return  position>0&&position<mDataList.size()?mDataList.get(position):null;
+            return  position>=0&&position<mDataList.size()?mDataList.get(position):null;
+            //注意这边应该是大于等于0,一开始报空指针
         }
         @Override
         public int getItemCount() {
