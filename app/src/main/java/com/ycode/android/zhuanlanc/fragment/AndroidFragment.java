@@ -2,6 +2,7 @@ package com.ycode.android.zhuanlanc.fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -14,15 +15,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.CycleInterpolator;
 
+import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
+import com.ycode.android.zhuanlanc.ContentActivity;
 import com.ycode.android.zhuanlanc.R;
-import com.ycode.android.zhuanlanc.adapter.AndroidRecAdapter;
+import com.ycode.android.zhuanlanc.adapter.BaseRecyclerAdapter;
+import com.ycode.android.zhuanlanc.adapter.TechRecAdapter;
+import com.ycode.android.zhuanlanc.app.AppApiConstant;
 import com.ycode.android.zhuanlanc.baseui.BaseFragment;
 
-import com.ycode.android.zhuanlanc.bean.AndroidBean;
-import com.ycode.android.zhuanlanc.networks.AndroidRetrofitSingle;
+import com.ycode.android.zhuanlanc.bean.GirlBean;
+import com.ycode.android.zhuanlanc.bean.TechBean;
+import com.ycode.android.zhuanlanc.networks.GirlRetrofitSingle;
+import com.ycode.android.zhuanlanc.networks.TechRetrofitSingle;
 
 
 import java.util.List;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,7 +58,8 @@ public class AndroidFragment extends BaseFragment {
     RecyclerView recyclerView;
     @Bind(R.id.SwipeContainer)
     SwipeRefreshLayout swipeContainer;
-    AndroidRecAdapter adapter;
+    TechRecAdapter adapter;
+    List<GirlBean.ResultsBean>GirlList;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,31 +69,62 @@ public class AndroidFragment extends BaseFragment {
         return view;
     }
     public void Refresh(){
-
-        AndroidRetrofitSingle.getSinIns().setSubscriber(mActivity, new Subscriber<AndroidBean>() {
+        GirlRetrofitSingle.getInstance().onSub("福利", 30,new Random().nextInt(10)+1, new Subscriber<GirlBean>() {
             @Override
             public void onCompleted() {
+                TechRetrofitSingle.getSinIns().setSubscriber(AppApiConstant.QUERY_ANDROID, new Subscriber<TechBean>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Snackbar.make(floatButton,"内容无法获取",Snackbar.LENGTH_LONG)
+                                .show();
+                    }
+
+                    @Override
+                    public void onNext(TechBean androidBean) {
+                        List<TechBean.PostsBean> listPost=androidBean.getPosts();
+                        adapter.clearItems();
+                        adapter.addItems(listPost);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
 
             @Override
             public void onError(Throwable e) {
-                Snackbar.make(floatButton,"出错啦!"+e.getMessage(),Snackbar.LENGTH_LONG)
-                        .setAction("Action",null).show();
+                Snackbar.make(floatButton,"妹子无法获取",Snackbar.LENGTH_LONG)
+                        .show();
             }
 
             @Override
-            public void onNext(AndroidBean androidBean) {
-                List<AndroidBean.PostsBean> listPost=androidBean.getPosts();
-                adapter.clearItems();
-                adapter.addItems(listPost);
-                adapter.notifyDataSetChanged();
-                recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-                recyclerView.setAdapter(adapter);
+            public void onNext(GirlBean girlBean) {
+              GirlList=girlBean.getResults();
+              adapter.setGirlList(GirlList);
+              adapter.notifyDataSetChanged();
             }
         });
+
     }
+
     private void initData() {
-        adapter=new AndroidRecAdapter(mActivity);
+        TechRecAdapter.myInterface mInter=new TechRecAdapter.myInterface(){
+
+            @Override
+            public void rootViewClick(TechBean.PostsBean postsBean, GirlBean.ResultsBean girlBean) {
+                Intent intent=new Intent(mActivity, ContentActivity.class);
+                intent.putExtra("desc",postsBean.getExcerpt());
+                intent.putExtra("title",postsBean.getTitle());
+                intent.putExtra("url",postsBean.getUrl());
+                intent.putExtra("iurl",girlBean.getUrl());
+                startActivity(intent);
+            }
+        };
+        adapter=new TechRecAdapter(mActivity,mInter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        recyclerView.setAdapter(adapter);
         swipeContainer.setColorSchemeResources(
                 android.R.color.holo_red_light,
                 android.R.color.holo_blue_bright,
@@ -98,7 +138,11 @@ public class AndroidFragment extends BaseFragment {
                 swipeContainer.setRefreshing(false);
             }
         });
+
         Refresh();
+
+    }
+    public void jumpActivity(Intent intent, BaseRecyclerAdapter adapter, int position){
 
     }
 }

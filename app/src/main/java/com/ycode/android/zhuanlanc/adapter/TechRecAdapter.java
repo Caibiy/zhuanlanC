@@ -3,19 +3,17 @@
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ycode.android.zhuanlanc.R;
-import com.ycode.android.zhuanlanc.bean.AndroidBean;
+import com.ycode.android.zhuanlanc.bean.GirlBean;
+import com.ycode.android.zhuanlanc.bean.TechBean;
 import com.ycode.android.zhuanlanc.util.NetWorkUtil;
 
 import java.util.ArrayList;
@@ -30,14 +28,23 @@ import butterknife.ButterKnife;
  * Time :     2016/8/16
  * Email:      caibiy666@gmail.com
  */
-public class AndroidRecAdapter extends  BaseRecyclerAdapter<AndroidBean.PostsBean> {
+public class TechRecAdapter extends  BaseRecyclerAdapter<TechBean.PostsBean> {
    /*  int[]mPosition;*/
    private final static int FADE_DURATION = 2000; // in milliseconds
     private int lastPosition=-1;
     private Context context;
-    public AndroidRecAdapter(Context context) {
+    private List<GirlBean.ResultsBean> GirlList;
+    private myInterface mInter;
+    public TechRecAdapter(Context context,myInterface mInter) {
         super(context);
         this.context=context;
+        this.mInter=mInter;
+    }
+    public static interface myInterface{
+        public void rootViewClick(TechBean.PostsBean postsBean,GirlBean.ResultsBean girlBean);
+    }
+    public void setGirlList(List<GirlBean.ResultsBean>GirlList){
+        this.GirlList=GirlList;
     }
   /*  public void initPositions(){
        int size=getItemCount();
@@ -54,13 +61,24 @@ public class AndroidRecAdapter extends  BaseRecyclerAdapter<AndroidBean.PostsBea
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof  AndroidViewHolder){
                 ((AndroidViewHolder) holder).tv_Cato.setText(NetWorkUtil.getCate(getItemData(position).getCategories()));
                 ((AndroidViewHolder) holder).tv_Date.setText(NetWorkUtil.FormatTime(getItemData(position).getDate()));//
                 ((AndroidViewHolder) holder).tv_Title.setText(getItemData(position).getTitle());
                 ((AndroidViewHolder) holder).tv_Intro.setText(NetWorkUtil.ReplaceHtmlP(getItemData(position).getExcerpt()));
+                ((AndroidViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                            mInter.rootViewClick(getItemData(position),GirlList.get(position));
+                    }
+                });
+
+            Glide.with(context).load(GirlList.get(position).getUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(((AndroidViewHolder) holder).im_Logo);
+
+
 /*
                 setAnimation(((AndroidViewHolder) holder).cardView,position);
 
@@ -68,6 +86,14 @@ public class AndroidRecAdapter extends  BaseRecyclerAdapter<AndroidBean.PostsBea
             setFadeAnimation(((AndroidViewHolder) holder).cardView);
             }
     }
+
+    @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+       if(holder instanceof AndroidViewHolder){
+            ((AndroidViewHolder) holder).cardView.clearAnimation();
+       }
+    }
+
     private void setFadeAnimation(View view) {
         AlphaAnimation anim2 = new AlphaAnimation(0.0f, 1.0f);
         anim2.setDuration(FADE_DURATION);
@@ -102,6 +128,9 @@ public class AndroidRecAdapter extends  BaseRecyclerAdapter<AndroidBean.PostsBea
         public AndroidViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+        }
+        public void clearAnimation(){
+            cardView.clearAnimation();
         }
     }
 }

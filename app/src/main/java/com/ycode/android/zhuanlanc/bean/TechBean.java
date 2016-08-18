@@ -7,7 +7,7 @@ import java.util.List;
  * Time :     2016/8/16
  * Email:      caibiy666@gmail.com
  */
-public class AndroidBean {
+public class TechBean {
 
     /**
      * status : ok

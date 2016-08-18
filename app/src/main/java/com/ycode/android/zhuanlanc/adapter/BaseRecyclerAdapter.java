@@ -27,7 +27,7 @@ public  abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recyc
         public List<T> getDataList(){return mDataList;}
         //返回指定位置数据
         public T getItemData(int position){
-            return  position>=0&&position<mDataList.size()?mDataList.get(position):null;
+            return  position>=0 && position<mDataList.size() ? mDataList.get(position):null;
             //注意这边应该是大于等于0,一开始报空指针
         }
         @Override

@@ -1,11 +1,9 @@
 package com.ycode.android.zhuanlanc.api;
 
 
-import com.ycode.android.zhuanlanc.bean.AndroidBean;
+import com.ycode.android.zhuanlanc.bean.TechBean;
 
-import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -17,6 +15,6 @@ import rx.Observable;
 public interface CaibiyInterface {
     public static final String BASEURL="http://www.caibi-y.com/api/";
     @POST("get_category_posts/")
-    public Observable<AndroidBean>getAndroid(@Query("slug") String json);
+    public Observable<TechBean>getAndroid(@Query("slug") String json);
 
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.ycode.android.zhuanlanc.bean.AndroidBean;
+import com.ycode.android.zhuanlanc.bean.TechBean;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,10 +43,10 @@ public class NetWorkUtil {
                 return sdf.format(date1);
         }
         //返回类别
-        public static String getCate(List<AndroidBean.PostsBean.CategoriesBean> tList){
-                List<AndroidBean.PostsBean.CategoriesBean> list=tList;
+        public static String getCate(List<TechBean.PostsBean.CategoriesBean> tList){
+                List<TechBean.PostsBean.CategoriesBean> list=tList;
                 String temp="Category：";
-                for(AndroidBean.PostsBean.CategoriesBean ca:list){
+                for(TechBean.PostsBean.CategoriesBean ca:list){
                         temp+=ca.getSlug()+" ";
                 }
                 return temp;
