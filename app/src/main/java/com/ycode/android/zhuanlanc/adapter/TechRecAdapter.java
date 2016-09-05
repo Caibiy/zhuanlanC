@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
  */
 public class TechRecAdapter extends  BaseRecyclerAdapter<TechBean.PostsBean> {
    /*  int[]mPosition;*/
-   private final static int FADE_DURATION = 2000; // in milliseconds
+   private final static int FADE_DURATION = 1000; // in milliseconds
     private int lastPosition=-1;
     private Context context;
     private List<GirlBean.ResultsBean> GirlList;

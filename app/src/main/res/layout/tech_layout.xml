@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_gravity="right|bottom"
+        app:layout_behavior="com.ycode.android.zhuanlanc.util.ScrollAwareFABBehavior"
         app:layout_anchor="@id/fragment_android_recycleView"
         app:layout_anchorGravity="bottom|right|end"
         />

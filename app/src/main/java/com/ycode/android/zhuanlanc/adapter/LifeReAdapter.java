@@ -33,7 +33,7 @@ public class LifeReAdapter extends BaseRecyclerAdapter<TechBean.PostsBean> {
     private mInterface myInter;
     private List<GirlBean.ResultsBean> GirlList;
     private Context context;
-    private final static int FADE_DURATION = 2000; // in milliseconds
+    private final static int FADE_DURATION = 1000; // in milliseconds
     public LifeReAdapter(Context context,mInterface myInter) {
         super(context);
         this.myInter=myInter;

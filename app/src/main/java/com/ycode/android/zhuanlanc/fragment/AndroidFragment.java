@@ -97,6 +97,7 @@ public class AndroidFragment extends BaseFragment {
             public void onError(Throwable e) {
                 Snackbar.make(floatButton,"妹子无法获取",Snackbar.LENGTH_LONG)
                         .show();
+
             }
 
             @Override

@@ -17,7 +17,7 @@ import com.ycode.android.zhuanlanc.fragment.WebFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity{
+public class MainActivity extends BaseActivity {
     @Bind(R.id.custom_Toolbar)
     Toolbar toolbar;
     @Bind(R.id.viewPager)
